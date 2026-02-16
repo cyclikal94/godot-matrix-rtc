@@ -27,7 +27,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Build MatrixRTC SDK dist from Element Call
         env:
@@ -35,7 +35,7 @@ jobs:
         run: |
           set -euo pipefail
           corepack enable
-          # Isolate git from any malformed inherited config/env on the runner.
+          # Isolate git from malformed inherited config/env on the runner, including nested git calls from yarn.
           unset GIT_CONFIG_PARAMETERS || true
           unset GIT_CONFIG_COUNT || true
           while IFS='=' read -r key _; do
@@ -46,6 +46,20 @@ jobs:
           export HOME=/tmp/element-call-home
           mkdir -p "${HOME}"
           git config --global core.autocrlf false
+          mkdir -p /tmp/element-call-bin
+          cat > /tmp/element-call-bin/git <<'EOF'
+          #!/usr/bin/env bash
+          unset GIT_CONFIG_PARAMETERS || true
+          unset GIT_CONFIG_COUNT || true
+          while IFS='=' read -r key _; do
+            case "$key" in
+              GIT_CONFIG_KEY_*|GIT_CONFIG_VALUE_*) unset "$key" ;;
+            esac
+          done < <(env)
+          exec /usr/bin/git "$@"
+          EOF
+          chmod +x /tmp/element-call-bin/git
+          export PATH="/tmp/element-call-bin:${PATH}"
 
           git clone --depth 1 https://github.com/element-hq/element-call.git /tmp/element-call
           cd /tmp/element-call
@@ -62,7 +76,7 @@ jobs:
               exit 1
             fi
           fi
-          yarn install --immutable || yarn install --frozen-lockfile || yarn install
+          yarn install --immutable || yarn install
           yarn build:sdk
           test -d dist
 
