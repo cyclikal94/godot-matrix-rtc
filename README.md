@@ -28,5 +28,6 @@ During web export, the editor plugin copies `addons/godot-matrix-rtc/dist` into 
 ## Credits
 
 - This was largely a refactor (turning into a Godot plugin) of the UI polish I did to [toger5/Godot-MatrixRTC-Keyboard-Kart](https://github.com/toger5/Godot-MatrixRTC-Keyboard-Kart). So all credit goes to [@toger5](https://github.com/toger5) for the original code 👍
+- See the FOSDEM'26 talk by Timo Kandra, Valere Fedronic and Robin Townsend - [MatrixRTC x Godot - A Battle Royale](https://fosdem.org/2026/schedule/event/UW9GKA-matrixrtc-godot-battle-royale/)
 - [Matrix Workation, Thailand Edition 🇹🇭](https://matrix.org/blog/2026/02/13/this-week-in-matrix-2026-02-13/#matrix-workation-thailand-edition-th)
 - You should check out [Matrix](https://matrix.org/)
