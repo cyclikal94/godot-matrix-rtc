@@ -35,6 +35,21 @@ jobs:
         run: |
           set -euo pipefail
           corepack enable
+          # Isolate git from any malformed inherited config/env on the runner.
+          unset GIT_CONFIG_PARAMETERS || true
+          unset GIT_CONFIG_COUNT || true
+          while IFS='=' read -r key _; do
+            case "$key" in
+              GIT_CONFIG_KEY_*|GIT_CONFIG_VALUE_*) unset "$key" ;;
+            esac
+          done < <(env)
+          export HOME=/tmp/element-call-home
+          mkdir -p "${HOME}"
+          cat > "${HOME}/.gitconfig" <<'EOF'
+[core]
+  autocrlf = false
+EOF
+
           git clone --depth 1 https://github.com/element-hq/element-call.git /tmp/element-call
           cd /tmp/element-call
           REF="${ELEMENT_CALL_REF:-}"
