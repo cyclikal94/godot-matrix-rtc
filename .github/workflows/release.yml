@@ -1,0 +1,74 @@
+name: Build and Release Addon
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "addons/**"
+      - ".github/workflows/release.yml"
+  workflow_dispatch:
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      ELEMENT_CALL_REF: main
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Build MatrixRTC SDK dist from Element Call
+        run: |
+          set -euo pipefail
+          corepack enable
+          git clone --depth 1 https://github.com/element-hq/element-call.git /tmp/element-call
+          cd /tmp/element-call
+          git fetch --depth 1 origin "${ELEMENT_CALL_REF}"
+          git checkout "${ELEMENT_CALL_REF}"
+          yarn install --immutable || yarn install --frozen-lockfile || yarn install
+          yarn build:sdk
+          test -d dist
+
+      - name: Copy dist into addon
+        run: |
+          set -euo pipefail
+          rm -rf addons/godot-matrix-rtc/dist
+          cp -R /tmp/element-call/dist addons/godot-matrix-rtc/dist
+
+      - name: Extract version from plugin.cfg
+        id: extract_version
+        run: |
+          set -euo pipefail
+          VERSION=$(grep '^version=' addons/godot-matrix-rtc/plugin.cfg | cut -d'=' -f2 | tr -d '"' | tr -d '[:space:]')
+          if [ -z "${VERSION}" ]; then
+            echo "Failed to read version from addons/godot-matrix-rtc/plugin.cfg" >&2
+            exit 1
+          fi
+          echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
+
+      - name: Create zip artifact
+        id: package
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.extract_version.outputs.version }}"
+          ARCHIVE="godot-matrix-rtc-${VERSION}.zip"
+          zip -r "${ARCHIVE}" addons
+          echo "archive=${ARCHIVE}" >> "${GITHUB_OUTPUT}"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.extract_version.outputs.version }}
+          name: Godot Matrix RTC v${{ steps.extract_version.outputs.version }}
+          draft: false
+          prerelease: false
+          files: ${{ steps.package.outputs.archive }}
