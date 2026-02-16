@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/cyclikal94/godot-matrix-rtc/refs/heads/main/icon.png" width="200" />
+
 # Godot x MatrixRTC
 
 This is a sample project and associated Godot Plugin which can be used to interact with MatrixRTC.
