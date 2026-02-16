@@ -1,27 +1,15 @@
 [gd_scene format=3 uid="uid://r8atwl231fsx"]
 
-[ext_resource type="Texture2D" uid="uid://cqs0nhg12serw" path="res://addons/godot-matrix-rtc/assets/map.svg" id="1_272bh"]
-[ext_resource type="Script" uid="uid://b1ryqfo8uh20r" path="res://car.gd" id="2_5vw27"]
-[ext_resource type="Texture2D" uid="uid://dgqve3hgjxl58" path="res://icon.svg" id="3_kek77"]
+[ext_resource type="PackedScene" uid="uid://dhomrs13l6qiy" path="res://game.tscn" id="1_1bvp3"]
 [ext_resource type="Texture2D" uid="uid://c2gkbi8nyo10s" path="res://addons/godot-matrix-rtc/assets/plus.svg" id="4_4c57u"]
 [ext_resource type="Texture2D" uid="uid://dtio7k0lbrgqe" path="res://addons/godot-matrix-rtc/assets/cross.svg" id="5_efxa6"]
-[ext_resource type="Script" uid="uid://7g80mrtfc0jk" path="res://track.gd" id="6_dg77c"]
-[ext_resource type="Script" uid="uid://dm7bc7k0vwy38" path="res://addons/godot-matrix-rtc/matrixRTCBridge.gd" id="7_ycdy4"]
+[ext_resource type="Script" uid="uid://dm7bc7k0vwy38" path="res://addons/godot-matrix-rtc/godot-matrix-rtc.gd" id="7_ycdy4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_awv5f"]
 draw_center = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ys6ar"]
 draw_center = false
-
-[sub_resource type="Curve2D" id="Curve2D_xe1eg"]
-bake_interval = 1.0
-_data = {
-"points": PackedVector2Array(-32.44219, 35.476112, 32.44219, -35.476112, 38, 20, -80.09104, -20.088425, 80.09104, 20.088425, 189.46707, -10.924126, 66.61171, -85.105896, -66.61171, 85.105896, 354, 159, 76.17851, -110.7515, -76.17851, 110.7515, 149.6329, 157.34084, 58.362404, -114.75231, -58.362404, 114.75231, 305, 380, 49.391254, 68.811264, -49.391254, -68.811264, 92, 384, 3.6301382, 75.19572, -3.6301382, -75.19572, 22, 158, 0, 0, 0, 0, 38, 20)
-}
-point_count = 8
-
-[sub_resource type="LabelSettings" id="LabelSettings_fo0vr"]
 
 [node name="UI" type="Control" unique_id=441020556]
 layout_mode = 3
@@ -47,7 +35,7 @@ offset_top = 8.0
 offset_right = 266.0
 offset_bottom = 63.0
 theme_override_font_sizes/font_size = 40
-text = "FloorIt Ipsum"
+text = "Game Title"
 metadata/_edit_layout_mode = 1
 metadata/_edit_use_custom_anchors = false
 
@@ -64,39 +52,6 @@ offset_bottom = -7.999695
 grow_vertical = 0
 theme_override_font_sizes/font_size = 25
 text = "Status: Not Connected"
-vertical_alignment = 2
-metadata/_edit_layout_mode = 1
-metadata/_edit_use_custom_anchors = false
-
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=126060903]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -250.0
-offset_top = -123.0
-offset_right = -8.0
-offset_bottom = -8.0
-grow_horizontal = 0
-grow_vertical = 0
-
-[node name="TypeHelperTitle" type="Label" parent="VBoxContainer" unique_id=1029449380]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Next Letters:"
-horizontal_alignment = 1
-vertical_alignment = 2
-metadata/_edit_layout_mode = 1
-metadata/_edit_use_custom_anchors = false
-
-[node name="TypeHelper" type="Label" parent="VBoxContainer" unique_id=654586496]
-unique_name_in_owner = true
-modulate = Color(1, 0, 1, 1)
-layout_mode = 2
-theme_override_font_sizes/font_size = 50
-horizontal_alignment = 1
 vertical_alignment = 2
 metadata/_edit_layout_mode = 1
 metadata/_edit_use_custom_anchors = false
@@ -133,64 +88,8 @@ grow_vertical = 2
 [node name="Game" type="Control" parent="Panel/AspectRatioContainer/Panel/CenterContainer" unique_id=1469477512]
 layout_mode = 2
 
-[node name="Track" type="Node2D" parent="Panel/AspectRatioContainer/Panel/CenterContainer/Game" unique_id=467830721]
+[node name="Example Game Scene" parent="Panel/AspectRatioContainer/Panel/CenterContainer/Game" unique_id=752219364 instance=ExtResource("1_1bvp3")]
 position = Vector2(-450, -450)
-script = ExtResource("6_dg77c")
-
-[node name="Map" type="Sprite2D" parent="Panel/AspectRatioContainer/Panel/CenterContainer/Game" unique_id=1178423865]
-scale = Vector2(0.798, 0.8)
-texture = ExtResource("1_272bh")
-
-[node name="Path2D" type="Path2D" parent="Panel/AspectRatioContainer/Panel/CenterContainer/Game/Map" unique_id=1010967932]
-unique_name_in_owner = true
-position = Vector2(-299.2742, -320.1655)
-scale = Vector2(1.4941435, 1.4941437)
-curve = SubResource("Curve2D_xe1eg")
-
-[node name="CarPath" type="Path2D" parent="Panel/AspectRatioContainer/Panel/CenterContainer/Game/Map" unique_id=1435937726]
-unique_name_in_owner = true
-position = Vector2(-299.2742, -320.1655)
-scale = Vector2(1.4941435, 1.4941437)
-curve = SubResource("Curve2D_xe1eg")
-
-[node name="letter" type="PathFollow2D" parent="Panel/AspectRatioContainer/Panel/CenterContainer/Game" unique_id=202541833]
-unique_name_in_owner = true
-visible = false
-position = Vector2(-437, -372)
-scale = Vector2(2.3200002, 2.3200002)
-
-[node name="Label" type="Label" parent="Panel/AspectRatioContainer/Panel/CenterContainer/Game/letter" unique_id=921396583]
-offset_left = -5.5315185
-offset_top = -12.425873
-offset_right = 34.468483
-offset_bottom = 10.574127
-scale = Vector2(0.5669729, 0.5669729)
-text = "A"
-
-[node name="Car" type="PathFollow2D" parent="Panel/AspectRatioContainer/Panel/CenterContainer/Game" unique_id=984848809]
-unique_name_in_owner = true
-visible = false
-modulate = Color(1, 1, 1, 0.53333336)
-z_index = 5
-script = ExtResource("2_5vw27")
-
-[node name="Sprite2D" type="Sprite2D" parent="Panel/AspectRatioContainer/Panel/CenterContainer/Game/Car" unique_id=106725261]
-scale = Vector2(0.25150257, 0.25150257)
-texture = ExtResource("3_kek77")
-
-[node name="Name" type="Label" parent="Panel/AspectRatioContainer/Panel/CenterContainer/Game/Car" unique_id=241471250]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -199.57411
-offset_top = -13.045095
-offset_right = -28.574112
-offset_bottom = 9.954905
-grow_horizontal = 0
-pivot_offset = Vector2(32, 11)
-text = "playerName"
-label_settings = SubResource("LabelSettings_fo0vr")
-horizontal_alignment = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=175628572]
 layout_mode = 1
@@ -220,7 +119,7 @@ text = "LEAVE"
 icon = ExtResource("5_efxa6")
 expand_icon = true
 
-[node name="MatrixRTCBridge" type="Node" parent="." unique_id=240392573]
+[node name="GodotMatrixRTC" type="Node" parent="." unique_id=240392573]
 unique_name_in_owner = true
 script = ExtResource("7_ycdy4")
 metadata/_custom_type_script = "uid://dm7bc7k0vwy38"

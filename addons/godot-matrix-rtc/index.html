@@ -7,19 +7,14 @@
         <script type="module">
             import { createMatrixRTCSdk } from "./dist/matrixrtc-sdk.js";
 
-            const APPLICATION = "com.github.toger5.rtc-application-type"; // rtc application type
-
-            console.log("matrixRTCSdk before create");
+            const APPLICATION = "com.github.toger5.rtc-application-type";
             window.matrixRTCSdk = await createMatrixRTCSdk(APPLICATION).catch(
-                (e) => {
-                    console.error("createMatrixRTCSdk", e);
-                },
+                (e) => console.error("createMatrixRTCSdk", e),
             );
-            console.log("matrixRTCSdk after create");
 
-            // Rename to a var without `$` to be comaptible with godot
             window.matrixRTCSdk.dataObs = window.matrixRTCSdk.data$;
             window.matrixRTCSdk.membersObs = window.matrixRTCSdk.members$;
+
             window.matrixRTCSdk.localMemberObs = window.matrixRTCSdk.localMember$;
             window.matrixRTCSdk.connectedObs = window.matrixRTCSdk.connected$;
 

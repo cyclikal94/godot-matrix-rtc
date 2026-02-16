@@ -14,10 +14,11 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="WebAppTest"
+config/name="Godot Matrix RTC"
+config/description="This is a sample project and associated Godot Plugin which can be used to interact with MatrixRTC."
 run/main_scene="uid://r8atwl231fsx"
 config/features=PackedStringArray("4.6", "GL Compatibility")
-config/icon="res://icon.svg"
+config/icon="uid://bfhcdrgcf67he"
 
 [display]
 
