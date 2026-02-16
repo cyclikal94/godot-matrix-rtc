@@ -11,7 +11,7 @@ The sample project and scenes can be used to have a pre-created UI (Join / Leave
 You can install this plugin by either:
 
 1. Downloading the latest [release](https://github.com/cyclikal94/godot-matrix-rtc/releases) from GitHub
-1. Installing via the Godot Asset Library
+1. Install via the Godot Asset Library
 
 ## Element Call SDK dist
 
@@ -24,6 +24,16 @@ This addon expects `addons/godot-matrix-rtc/dist` to exist.
   1. Copy `dist` to `addons/godot-matrix-rtc/dist`
 
 During web export, the editor plugin copies `addons/godot-matrix-rtc/dist` into the export output folder as `dist/`.
+
+## Deloying as a widget in Matrix
+
+Deploy your exported build then use:
+
+```
+/addwidget https://example.com/GodotMatrixRTC.html?widgetId=$matrix_widget_id&perParticipantE2EE=true&userId=$matrix_user_id&deviceId=$org.matrix.msc3819.matrix_device_id&baseUrl=$org.matrix.msc4039.matrix_base_url&roomId=$matrix_room_id
+```
+
+Replacing `example.com` with where you have deployed and `GodotMatrixRTC.html` with the name of the exported HTML, if you have changed from the default name defined by the Export Preset.
 
 ## Credits
 
