@@ -4,6 +4,11 @@ extends EditorPlugin
 const EXPORT_PRESETS_PATH := "res://export_presets.cfg"
 const EXAMPLE_EXPORT_PRESETS_PATH := "res://addons/godot-matrix-rtc/example_export_presets.cfg"
 const EXPORT_DIST_PLUGIN_SCRIPT := preload("res://addons/godot-matrix-rtc/export_dist_plugin.gd")
+const EXAMPLE_PROJECT_URL := "https://github.com/cyclikal94/godot-matrix-rtc"
+const NOTICE_DEFAULT_SIZE := Vector2i(720, 360)
+const NOTICE_MIN_HEIGHT := 340
+const NOTICE_MAX_VIEWPORT_RATIO := 0.9
+const NOTICE_CONTENT_VERTICAL_PADDING := 140
 
 const INSTALL_RESULT_ADDED := 1
 const INSTALL_RESULT_ALREADY_PRESENT := 0
@@ -174,7 +179,7 @@ func _serialize_preset(config: ConfigFile, source_index: int, target_index: int)
 func _show_reload_notice(preset_name: String) -> void:
 	var dialog := AcceptDialog.new()
 	dialog.title = "Godot Matrix RTC"
-	dialog.dialog_text = "Export preset \"%s\" installed.\nReload the project to refresh the Export UI." % preset_name
+	dialog.dialog_text = ""
 	dialog.exclusive = false
 	dialog.get_ok_button().hide()
 	dialog.get_ok_button().disabled = true
@@ -182,12 +187,27 @@ func _show_reload_notice(preset_name: String) -> void:
 	var not_now_button := dialog.add_button("Not Now", false)
 	var reload_button := dialog.add_button("Reload", true)
 
+	var message := RichTextLabel.new()
+	message.bbcode_enabled = true
+	message.scroll_active = true
+	message.fit_content = false
+	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	message.set_anchors_preset(Control.PRESET_FULL_RECT)
+	message.offset_left = 16
+	message.offset_top = 16
+	message.offset_right = -16
+	message.offset_bottom = -84
+	message.text = "[center]✅ Godot Matrix RTC plugin setup complete.\nExport preset \"%s\" installed, you'll need to reload the project to refresh the Export UI.\n\nIt's highly recommended to take a look at the sample project as it is pre-configured and nicely resizes regardless of widget layout:\n\n[url=%s]%s[/url][/center]" % [preset_name, EXAMPLE_PROJECT_URL, EXAMPLE_PROJECT_URL]
+	message.meta_clicked.connect(_on_notice_link_clicked)
+
 	var base_control := get_editor_interface().get_base_control()
 	base_control.add_child(dialog)
+	dialog.add_child(message)
 	dialog.close_requested.connect(dialog.queue_free)
 	not_now_button.pressed.connect(dialog.queue_free)
 	reload_button.pressed.connect(_on_reload_button_pressed.bind(dialog))
-	dialog.popup_centered()
+	dialog.popup_centered(NOTICE_DEFAULT_SIZE)
+	call_deferred("_fit_notice_dialog", dialog, message)
 
 
 func _on_reload_button_pressed(dialog: AcceptDialog) -> void:
@@ -197,6 +217,26 @@ func _on_reload_button_pressed(dialog: AcceptDialog) -> void:
 		editor.restart_editor(true)
 	else:
 		push_error("[Godot Matrix RTC] Could not reload automatically. Please reload the project manually.")
+
+
+func _on_notice_link_clicked(meta: Variant) -> void:
+	var err := OS.shell_open(str(meta))
+	if err != OK:
+		push_error("[Godot Matrix RTC] Could not open example project URL: %s" % str(meta))
+
+
+func _fit_notice_dialog(dialog: AcceptDialog, message: RichTextLabel) -> void:
+	if not is_instance_valid(dialog) or not is_instance_valid(message):
+		return
+
+	var viewport_size: Vector2 = get_editor_interface().get_base_control().get_viewport_rect().size
+	var max_height := int(viewport_size.y * NOTICE_MAX_VIEWPORT_RATIO)
+	var content_height := message.get_content_height()
+	var target_height := clampi(content_height + NOTICE_CONTENT_VERTICAL_PADDING, NOTICE_MIN_HEIGHT, max_height)
+	dialog.size = Vector2i(dialog.size.x, target_height)
+	var centered_position: Vector2 = (viewport_size - Vector2(dialog.size)) / 2.0
+	dialog.position = Vector2i(centered_position)
+	message.scroll_active = target_height < content_height + NOTICE_CONTENT_VERTICAL_PADDING
 
 
 func _register_export_dist_plugin() -> void:
