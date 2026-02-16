@@ -8,14 +8,17 @@ on:
       - "addons/**"
       - ".github/workflows/release.yml"
   workflow_dispatch:
+    inputs:
+      element_call_ref:
+        description: "Optional Element Call branch, tag, or commit to build from"
+        required: false
+        default: ""
 
 jobs:
   create-release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      ELEMENT_CALL_REF: main
 
     steps:
       - name: Checkout repository
@@ -27,13 +30,26 @@ jobs:
           node-version: "20"
 
       - name: Build MatrixRTC SDK dist from Element Call
+        env:
+          ELEMENT_CALL_REF: ${{ github.event.inputs.element_call_ref }}
         run: |
           set -euo pipefail
           corepack enable
           git clone --depth 1 https://github.com/element-hq/element-call.git /tmp/element-call
           cd /tmp/element-call
-          git fetch --depth 1 origin "${ELEMENT_CALL_REF}"
-          git checkout "${ELEMENT_CALL_REF}"
+          REF="${ELEMENT_CALL_REF:-}"
+          if [ -n "${REF}" ]; then
+            if git ls-remote --exit-code --heads origin "${REF}" >/dev/null 2>&1; then
+              git fetch --depth 1 origin "${REF}"
+              git checkout FETCH_HEAD
+            elif git ls-remote --exit-code --tags origin "${REF}" >/dev/null 2>&1; then
+              git fetch --depth 1 origin "refs/tags/${REF}:refs/tags/${REF}"
+              git checkout "${REF}"
+            else
+              echo "Requested Element Call ref '${REF}' was not found as a branch or tag." >&2
+              exit 1
+            fi
+          fi
           yarn install --immutable || yarn install --frozen-lockfile || yarn install
           yarn build:sdk
           test -d dist
