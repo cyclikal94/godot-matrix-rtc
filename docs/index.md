@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Godot x Matrix RTC
+title: Godot Matrix RTC
 ---
 
 This is a sample project and associated Godot Plugin which can be used to interact with MatrixRTC.
