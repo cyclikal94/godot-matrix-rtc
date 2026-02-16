@@ -22,3 +22,9 @@ This addon expects `addons/godot-matrix-rtc/dist` to exist.
   1. Copy `dist` to `addons/godot-matrix-rtc/dist`
 
 During web export, the editor plugin copies `addons/godot-matrix-rtc/dist` into the export output folder as `dist/`.
+
+## Credits
+
+- This was largely a refactor (turning into a Godot plugin) of the UI polish I did to [toger5/Godot-MatrixRTC-Keyboard-Kart](https://github.com/toger5/Godot-MatrixRTC-Keyboard-Kart). So all credit goes to @toger5 for the original code 👍
+- [Matrix Workation, Thailand Edition 🇹🇭](https://matrix.org/blog/2026/02/13/this-week-in-matrix-2026-02-13/#matrix-workation-thailand-edition-th)
+- You should check out [Matrix](https://matrix.org/)
