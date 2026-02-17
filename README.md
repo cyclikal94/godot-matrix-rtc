@@ -11,7 +11,7 @@ The sample project and scenes can be used to have a pre-created UI (Join / Leave
 You can install this plugin by either:
 
 1. Downloading the latest [release](https://github.com/cyclikal94/godot-matrix-rtc/releases) from GitHub
-1. Install via the Godot Asset Library
+1. Install via the [Godot Asset Library](https://godotengine.org/asset-library/asset/4788)
 
 ## Element Call SDK dist
 
