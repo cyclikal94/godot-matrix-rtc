@@ -3,6 +3,8 @@ layout: page
 title: Godot Matrix RTC
 ---
 
+<img src="https://raw.githubusercontent.com/cyclikal94/godot-matrix-rtc/refs/heads/main/icon.png" width="200" />
+
 This is a sample project and associated Godot Plugin which can be used to interact with MatrixRTC.
 
 The sample project and scenes can be used to have a pre-created UI (Join / Leave) via the exported project which will resize nicely size within any widget layout (Horizontal / Vertical).
@@ -12,7 +14,10 @@ The sample project and scenes can be used to have a pre-created UI (Join / Leave
 You can install this plugin by either:
 
 1. Downloading the latest [release](https://github.com/cyclikal94/godot-matrix-rtc/releases) from GitHub
-1. Install via the Godot Asset Library
+    - Extract the zip and copy the `addons` folder into your Godot project directory
+1. Install via the [Godot Asset Library](https://godotengine.org/asset-library/asset/4788)
+    - Make sure to uncheck "Ignore Asset Root" so the plugin is installed into your `addons` directory
+    - Remember to enable the plugin via `Project Settings` under `Plugins`
 
 ## Element Call SDK dist
 
